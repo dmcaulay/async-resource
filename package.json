@@ -8,5 +8,11 @@
   },
   "repository": "",
   "author": "Dan McAulay",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": "~1.7.4",
+    "underscore": "~1.4.3"
+  }
 }
