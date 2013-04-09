@@ -1,6 +1,6 @@
 {
   "name": "async-resource",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "gives you a simple interface for initializing async resources. send it an init function and it will return a function that calls back with your initialized resource.",
   "main": "index.js",
   "scripts": {
@@ -10,9 +10,9 @@
   "author": "Dan McAulay",
   "license": "BSD",
   "dependencies": {
+    "underscore": "~1.4.3"
   },
   "devDependencies": {
-    "mocha": "~1.7.4",
-    "underscore": "~1.4.3"
+    "mocha": "~1.7.4"
   }
 }

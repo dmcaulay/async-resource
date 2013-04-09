@@ -50,8 +50,7 @@ module.exports.ensure = function(Class, getResource) {
       var context = this
       var args = arguments;
       var callback = _.last(args);
-      if (_.isFunction(getResource)) getResource = getResource.apply(context)
-      getResource(function(err) {
+      this[getResource](function(err) {
         if (err) return callback(err)
         fn.apply(context, args)
       })
