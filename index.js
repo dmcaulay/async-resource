@@ -10,6 +10,8 @@
 // you don't really want an async.queue because you're only waiting for the connection to
 // complete before moving forward
 
+var _ = require('underscore')
+
 var waitForAsync = module.exports.waitForAsync = function () {
   var waiting = false,
       queuedTasks = [];
@@ -40,5 +42,20 @@ module.exports.get = function (getResourceFn) {
     }
     if(callback) callback(null, resource);
   };
+}
+
+module.exports.ensure = function(Class, getResource) {
+  return function(name, fn) {
+    Class.prototype[name] = function() {
+      var context = this
+      var args = arguments;
+      var callback = _.last(args);
+      if (_.isFunction(getResource)) getResource = getResource.apply(context)
+      getResource(function(err) {
+        if (err) return callback(err)
+        fn.apply(context, args)
+      })
+    }
+  }
 }
 

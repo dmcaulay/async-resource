@@ -1,6 +1,7 @@
 
 var assert = require('assert')
 var getResource = require('../index').get
+var ensureResource = require('../index').ensure
 var _ = require('underscore')
 
 var calls
@@ -32,5 +33,27 @@ describe('async-resource', function() {
         step()
       })
     }
+  })
+  describe('ensure', function() {
+    it ('guarantees the resource is initialized before calling the class function', function(done) {
+      calls = 0
+      var Class = function() {
+        this.getSimple = getResource(simpleAsync.bind(null, 1000))
+      }
+      var ensureSimple = ensureResource(Class, function() { return this.getSimple })
+      var safe = function(a, b, callback) {
+        assert.equal(calls, 1)
+        assert.equal(a, 10)
+        assert.equal(b, 100)
+        callback()
+      }
+      ensureSimple('safe', safe)
+
+      var test = new Class()
+      test.safe(10, 100, function(err) {
+        assert.ifError(err)
+        done()
+      })
+    })
   })
 })
