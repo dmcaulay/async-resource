@@ -44,9 +44,11 @@ module.exports.get = function (getResourceFn) {
   };
 }
 
-module.exports.ensure = function(Class, getResource) {
-  return function(name, fn) {
-    Class.prototype[name] = function() {
+module.exports.ensure = function(object, getResource, methods) {
+  if (!_.isArray(methods)) methods = [methods]
+  methods.forEach(function(method) {
+    var fn = object[method]
+    object[method] = function() {
       var context = this
       var args = arguments;
       var callback = _.last(args);
@@ -55,6 +57,6 @@ module.exports.ensure = function(Class, getResource) {
         fn.apply(context, args)
       })
     }
-  }
+  })
 }
 

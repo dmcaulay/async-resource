@@ -40,14 +40,13 @@ describe('async-resource', function() {
       var Class = function() {
         this.getSimple = getResource(simpleAsync.bind(null, 1000))
       }
-      var ensureSimple = ensureResource(Class, 'getSimple')
-      var safe = function(a, b, callback) {
+      Class.prototype.safe = function(a, b, callback) {
         assert.equal(calls, 1)
         assert.equal(a, 10)
         assert.equal(b, 100)
         callback()
       }
-      ensureSimple('safe', safe)
+      ensureResource(Class.prototype, 'getSimple', 'safe')
 
       var test = new Class()
       test.safe(10, 100, function(err) {
