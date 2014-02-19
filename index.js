@@ -29,7 +29,7 @@ var waitForAsync = module.exports.waitForAsync = function () {
   };
 };
 
-module.exports.get = function (getResourceFn) {
+var get = module.exports.get = function (getResourceFn) {
   var wait = waitForAsync();
   var resource;
   return function (callback) {
@@ -59,4 +59,17 @@ module.exports.ensure = function(object, getResource, methods) {
     }
   })
 }
+
+module.exports.ensureFn = function(fn, getResourceFn) {
+  var safeFn = function() {
+    var context = this
+    var args = arguments;
+    var callback = _.last(args);
+    get(getResourceFn)(function(err) {
+      if (err) return callback(err)
+      fn.apply(context, args)
+    });
+  };
+  return safeFn;
+};
 
