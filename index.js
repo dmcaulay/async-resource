@@ -65,7 +65,7 @@ module.exports.ensureFn = function(fn, getResourceFn) {
     var context = this
     var args = arguments;
     var callback = _.last(args);
-    get(getResourceFn)(function(err) {
+    getResourceFn(function(err) {
       if (err) return callback(err)
       fn.apply(context, args)
     });

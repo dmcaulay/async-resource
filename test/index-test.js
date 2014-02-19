@@ -65,10 +65,14 @@ describe('async-resource', function() {
         assert.equal(b, 100)
         callback()
       }
-      safe = ensureFn(safe, simpleAsync.bind(null, 1000));
+      var getSimple = getResource(simpleAsync.bind(null, 1000))
+      safe = ensureFn(safe, getSimple);
       safe(10, 100, function(err) {
         assert.ifError(err)
-        done()
+        safe(10, 100, function(err) {
+          assert.ifError(err)
+          done()
+        });
       });
     });
   });
