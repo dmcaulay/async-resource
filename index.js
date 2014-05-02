@@ -23,8 +23,9 @@ var waitForAsync = module.exports.waitForAsync = function () {
     fn(function() {
       waiting = false;
       var args = arguments;
-      queuedTasks.forEach(function(task) { task.apply(null, args); });
+      var toApply = queuedTasks;
       queuedTasks = [];
+      toApply.forEach(function(task) { task.apply(null, args); });
     });
   };
 };
