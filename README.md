@@ -10,6 +10,8 @@ $ npm install async-resource
 
 ## Usage
 
+With a class.
+
 ``` js
 // DB client has a bunch of setup that requires async calls
 var DBClient = require('db').Client;
@@ -56,5 +58,38 @@ DbWrapper.prototype.delete = function(query, callback) {
 };
 
 // wrap all the methods that depend on the connected DB
-ensureResource(DbWrapper.prototype, 'ensureConnected', [ 'select', 'insert', 'update', 'delete' ])
+ensureResource(DbWrapper.prototype, 'ensureConnected', [ 'select', 'insert', 'update', 'delete' ]);
+```
+
+With a function.
+
+``` js
+// DB client has a bunch of setup that requires async calls
+var DBClient = require('db').Client;
+
+
+var getResource = require('async-resource').get
+var ensureFn = require('async-resource').ensureFn
+
+var db;
+
+var init = function(callback) {
+  DbClient.connect(connectionUrl, function(err, db) {
+    if (err) return callback(err)
+    db = db;
+
+    // make sure to callback with true if the setup is successful
+    if (!config.indexes) return callback(null, true);
+    setupIndexes(db, config.indexes, function(err) {
+      callback(err, true);
+    });
+  });
+};
+var ensureInit = getResource(init);
+
+var select = function(query, callback) {
+  db.select(query, callback);
+};
+// wrap select
+select = ensureFn(select, ensureInit);
 ```
