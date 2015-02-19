@@ -1,6 +1,6 @@
 # async-resource
 
-This is a simple interface for initializing async resources. Send it an init function and it will return a function that calls back with your initialized resource.
+This is a simple interface for initializing async resources. Send it an init function and it will return a function that calls back with your initialized resource. It ensures that the resource will only be initialized once.
 
 ## Installation
 
